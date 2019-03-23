@@ -6,6 +6,7 @@ const localStrategy = require('passport-local').Strategy;
 const passport = require('passport');
 const bcrypt = require('bcryptjs')
 const {authenticateUser} = require('../middlewares/authenticateUser');
+const _ = require('lodash');
 
 //register and add user
 // router.post('/', (req, res) => {
@@ -27,7 +28,7 @@ router.post('/login', (req, res,next) => {
         if(user){
             bcrypt.compare(req.body.password,user.password,(err,isMatch)=>{
                 if(isMatch){
-                    jwt.sign(req.body, 'supersecret',{expiresIn:'60d'},(err,token)=>{
+                    jwt.sign(_.pick(user,['userName','email','age','_id']), 'supersecret',{expiresIn:'60d'},(err,token)=>{
                         res.json(token)
                         next()
                     })

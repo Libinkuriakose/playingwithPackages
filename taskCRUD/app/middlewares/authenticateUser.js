@@ -4,16 +4,19 @@ const { User } = require('../models/user');
 const jwt = require('jsonwebtoken');
 const localStrategy = require('passport-local').Strategy;
 const passport = require('passport');
+const atob = require('atob');
 
 
 const authenticateUser = ((req, res, next)=>{
     const tkn=req.headers.authorization;
+    console.log(req.headers);
     if(typeof tkn !== "undefined"){
         let token=tkn.split(' ');
         jwt.verify(token[1],'supersecret',(err,authData)=>{
             if(err){
                 res.sendStatus(403);
             }else{
+                req.id=JSON.parse(atob(token[1].split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))._id;                
                 next()
             }
         })
@@ -28,6 +31,11 @@ const authenticateUser = ((req, res, next)=>{
 //         res.json(token)
 //     })
 // });
+// function parseJwt (token) {
+//     var base64Url = token.split('.')[1];
+//     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//     return JSON.parse(window.atob(base64));
+// };
 
 module.exports={
     authenticateUser

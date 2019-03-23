@@ -31,8 +31,8 @@ router.post('/', (req, res) => {
 
 
 //update a user
-router.put('/:id',authenticateUser, (req, res) => {
-    User.findOneAndUpdate({ _id: req.params.id}, { $set: req.body }).then((user) => {
+router.put('/id',authenticateUser, (req, res) => {
+    User.findOneAndUpdate({ _id: req.id}, { $set: req.body }).then((user) => {
         if(!user){
             res.send({
                 notice: 'user not found'
@@ -47,9 +47,8 @@ router.put('/:id',authenticateUser, (req, res) => {
 });
 
 //find user by id
-router.get('/:id',authenticateUser, (req, res) => {
-    let id = req.params.id;
-    User.findById(id).then((user) => {
+router.get('/id',authenticateUser, (req, res) => {
+    User.findById(req.id).then((user) => {
         res.send(user);
     });
 });
@@ -65,9 +64,8 @@ router.get('/name',authenticateUser, (req, res) => {
 });
 
 //delete a user
-router.delete('/:id',authenticateUser, (req, res) => {
-    let id = req.params.id;
-    User.findByIdAndDelete(id).then((user) => {
+router.delete('/id',authenticateUser, (req, res) => {
+    User.findByIdAndDelete(req.id).then((user) => {
         if(user) {
             res.send(user);
         } else {

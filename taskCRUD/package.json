@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "atob": "^2.1.2",
     "bcryptjs": "^2.4.3",
     "express": "^4.16.4",
     "express-joi-validator": "^2.0.1",
