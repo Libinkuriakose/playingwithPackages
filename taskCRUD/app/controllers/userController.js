@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models/user');
 const {authenticateUser} = require('../middlewares/authenticateUser');
+const bcrypt = require('bcryptjs')
+const {bCrypt}=require('../middlewares/bCrypt');
+
 
 
 //see all of user
@@ -18,7 +21,7 @@ router.get('/',authenticateUser,(req, res) => {
 });
 
 // add a user
-router.post('/', (req, res) => {
+router.post('/',bCrypt, (req, res) => {
     User.create(req.body).then((user) => {
         res.send({
             user,

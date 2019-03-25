@@ -26,9 +26,13 @@ router.post('/login', (req, res,next) => {
     User.findOne({userName:req.body.userName},(err,user)=>{
         if(err)throw err;
         if(user){
+            console.log(req.body.password);
             bcrypt.compare(req.body.password,user.password,(err,isMatch)=>{
+                console.log(err,isMatch);
                 if(isMatch){
-                    jwt.sign(_.pick(user,['userName','email','age','_id']), 'supersecret',{expiresIn:'60d'},(err,token)=>{
+                    user.accesscode=(Math.floor(Math.random()*8999)+1000);
+                    user.save();
+                    jwt.sign(_.pick(user,['userName','email','age','_id','accesscode']), 'supersecret',{expiresIn:'60d'},(err,token)=>{
                         res.json(token)
                         next()
                     })

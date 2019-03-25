@@ -9,15 +9,21 @@ const atob = require('atob');
 
 const authenticateUser = ((req, res, next)=>{
     const tkn=req.headers.authorization;
-    console.log(req.headers);
     if(typeof tkn !== "undefined"){
         let token=tkn.split(' ');
         jwt.verify(token[1],'supersecret',(err,authData)=>{
             if(err){
                 res.sendStatus(403);
             }else{
-                req.id=JSON.parse(atob(token[1].split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))._id;                
-                next()
+                let a = JSON.parse(atob(token[1].split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+                User.findOne({accesscode:a.accesscode}).then((user)=>{
+                    if(user){
+                    req.id=a.id;
+                    next();
+                    }else{
+                        res.sendStatus(403);
+                    }
+                }).catch(err=>res.sendStatus(403));
             }
         })
     }else{

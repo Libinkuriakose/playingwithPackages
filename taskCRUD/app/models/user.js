@@ -30,18 +30,23 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:true
+    },
+    accesscode:{
+        type:Number
     }
 });
-
-userSchema.pre('save', function (next) {
-    let user = this;
-    bcrypt.genSalt(10).then((salt) => {
-        bcrypt.hash(user.password, salt).then((hashed) => {
-            user.password = hashed;
-            next(); 
-        });
-    });
-});
+// console.log(this,'this')
+// userSchema.pre('save', function (next) {
+//     let user = this;
+//     console.log(this.password,'this');
+//     if(user.password==undefined){
+//     bcrypt.genSalt(10).then((salt) => {
+//         bcrypt.hash(user.password, salt).then((hashed) => {
+//             user.password = hashed;
+//         });
+//     });
+//     }
+// });
 
 
 
